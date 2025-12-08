@@ -33,7 +33,7 @@ def _():
 
     SAVE_MODEL = False
 
-    SELECTED_FEATURES = ["tenure", "MonthlyCharges", "TechSupport_yes"]
+    SELECTED_FEATURES = ["tenure", "MonthlyCharges", "TechSupport_yes", "PhoneService_yes", "Contract_one year", "Contract_two year", "InternetService_fiber optic", "InternetService_no"]
     TEST_SIZE = 0.20
     C_VALUE = 1.0
     MAX_ITER = 1000
@@ -61,8 +61,11 @@ def _(DATA_PATH):
 def _(SELECTED_FEATURES):
     def preprocess_telco(df: pd.DataFrame):
         cleaned = df.copy()
+
         if "customerID" in cleaned.columns:
             cleaned = cleaned.drop(columns=["customerID"])
+
+        # Data Cleaning: Handle missing values and convert data types    
         cleaned["TotalCharges"] = pd.to_numeric(
             cleaned["TotalCharges"], errors="coerce"
         )
@@ -71,6 +74,7 @@ def _(SELECTED_FEATURES):
         for column in cleaned.select_dtypes(include="object"):
             cleaned[column] = cleaned[column].str.lower().str.strip()
 
+        # Data Transformation: Transform categorical variables using one-hot encoding
         X = pd.get_dummies(cleaned.drop(columns=["Churn"]), drop_first=True, dtype=int)
 
         print("Available features after encoding:", X.columns.tolist())
@@ -78,8 +82,11 @@ def _(SELECTED_FEATURES):
 
         # Choose features
         X = X[SELECTED_FEATURES]
+
+        # Target variable
         y = cleaned["Churn"].map({"yes": 1, "no": 0}).to_numpy()
 
+        # Data Standardization
         scaler = StandardScaler()
         X_scaled = scaler.fit_transform(X)
         return cleaned, X_scaled, y, scaler, X.columns.tolist()
@@ -97,6 +104,8 @@ def _(preprocess_telco, telco_df):
 
 @app.cell
 def _(C_VALUE, MAX_ITER, SOLVER, TEST_SIZE, X_scaled, y):
+
+    # Splitting the data into Training and Testing sets
     X_train, X_test, y_train, y_test = train_test_split(
         X_scaled,
         y,
@@ -105,11 +114,13 @@ def _(C_VALUE, MAX_ITER, SOLVER, TEST_SIZE, X_scaled, y):
         random_state=42,
     )
 
+    # Model Training
     model = LogisticRegression(
         solver=SOLVER, C=C_VALUE, max_iter=MAX_ITER, random_state=42
     )
     model.fit(X_train, y_train)
 
+    # Model Testing & Evaluation
     y_pred = model.predict(X_test)
     y_proba = model.predict_proba(X_test)[:, 1]
 
