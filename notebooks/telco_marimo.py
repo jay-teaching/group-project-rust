@@ -31,7 +31,7 @@ def _():
     DATA_PATH = Path("input/WA_Fn-UseC_-Telco-Customer-Churn.csv")
     MODEL_SAVE_PATH = Path("models/telco_logistic_regression.joblib")
 
-    SAVE_MODEL = False
+    SAVE_MODEL = True
 
     SELECTED_FEATURES = ["tenure", "MonthlyCharges", "TechSupport_yes", "PhoneService_yes", "Contract_one_year", "Contract_two_year", "InternetService_fiber_optic", "InternetService_no"]
     TEST_SIZE = 0.20
