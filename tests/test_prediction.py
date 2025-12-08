@@ -15,6 +15,6 @@ def test_make_prediction_simple():
         Contract_one_year=0,
         Contract_two_year=0,
         InternetService_fiber_optic=0,
-        OnlineSecurity_yes=0
+        InternetService_no=0
     )
     assert isinstance(result, float)
