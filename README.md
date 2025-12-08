@@ -1,10 +1,15 @@
-# Telco Churn Predictions
+# Telco Churn Predictions (Group Rust)
 
 This repository contains code to build and deploy a machine learning
 model that predicts customer churn for a telecommunications company
 using the Marimo framework. The model is trained on the well known
 IBM Telco Customer Churn dataset.
 
+## Authors
+- Alessandra Marchetti
+- Annamária-Réka Vass
+- Tsung-Han Tsai
+- Antonios Skoufis
 
 ## The Model
 
@@ -14,6 +19,11 @@ The model currently uses the following features:
 - `tenure`: Number of months the customer has stayed with the company.
 - `MonthlyCharges`: The amount charged to the customer monthly.
 - `TechSupport_yes`: Binary indicator of whether the customer has tech support.
+- `PhoneService_yes`: Binary indicator of whether the customer has subscribed to the Phone Service.
+- `Contract_one year`: Indicator of whether the customer signed a one year contract.
+- `Contract_two year`: Indicator of whether the customer signed a two year contract.
+- `InternetService_fiber optic`: Binary indicator of whether the customer uses fiber optic internet service.
+- `InternetService_no`: Binary indicator of whether the customer uses any internet service at all.
 
 We recommend looking into additional features and engineering new ones to
 improve model performance. There are other possible issues to explore, including
