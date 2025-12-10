@@ -1,4 +1,4 @@
-name: Code Quality
+name: Code App Quality Check CI
 
 # This defines the triggers for the workflow
 on:
