@@ -1,19 +1,38 @@
 # Telco Churn Predictions (Group Rust)
 
-This repository contains code to build and deploy a machine learning
-model that predicts customer churn for a telecommunications company
-using the Marimo framework. The model is trained on the well known
-IBM Telco Customer Churn dataset.
-
 ## Authors
 - Alessandra Marchetti
 - Annamária-Réka Vass
 - Tsung-Han Tsai
 - Antonios Skoufis
 
-## The Model
+## Project Summary
 
-The model is a simple logistic regression model built using `scikit-learn`.
+This project aims to build, evaluate and deploy a machine learning based churn-prediction model to help the company predict the customer churn and take measures in retaining the clients.
+
+## The System Architecture
+
+- **Machine Learning Model**
+
+    - A **simple logistics regression model** trained on historical customer data.
+    - Taking **6 parameters** inputs to perform churn probability calculation.
+
+- **Frontend (User Interface)**:
+
+    - Using **Marimo Notebook** to build a reactive, interactive UI 
+    - Providing a user-friendly dashboard for stakeholders to input customer features.
+    - Deployed in 2 approaches (**Azure Container Apps** and **Azure Virtual Machine**)
+
+- **Backend API**
+
+    - Built by **Azure Functions** to act as the bridge between the UI and the ML model. 
+    - Handling HTTP requests, performs input validation, and triggers the ML model.
+
+
+
+## Machine Learning Model
+
+The model utilized `scikit-learn` to build a simple logistic regression model.
 
 The model uses the following features:
 - `tenure`: Number of months the customer has stayed with the company.
@@ -25,7 +44,7 @@ The model uses the following features:
 - `InternetService_fiber optic`: Binary indicator of whether the customer uses fiber optic internet service.
 - `InternetService_no`: Binary indicator of whether the customer uses any internet service at all.
 
-## The Interactive Frontend
+## The Frontend - Marimo Notebook
 
 We used **Marimo Notebook** to allow users interacting with the model predictions by changing the parameters' input. 
 
@@ -43,19 +62,116 @@ Upon changing the input, the user will be able to see the changes in:
 
 In addition, the parameter input table will also be visible.
 
+## The Frontend - Deployment
 
-## CI Pipeline
+The frontend is deployed in 2 separate approaches, **Azure Container Apps** and **Azure Virtual Machine**.
+
+1. **Azure Container Apps (container-based deployment)**
+
+    The primary frontend deployment, which runs a Docker image, built and published through **GitHub Actions**.
+
+    - **Container Image**: The frontend is packaged as a Docker image and published to **GitHub Container Registry (GHCR)**.
+
+    - **Image Repository**: ghcr.io/jay-teaching/group-project-rust/frontend
+
+    - **Tag used**: main
+
+    - **Azure Container App Detail**:
+
+        - **Container App name**: rustpredict-frontend
+        - **Resource group**: DSMT
+        - **Region**: Switzerland North
+        - **Workload profile**: Consumption
+
+    - **Public URL (Container App)**: 
+
+        https://rustpredict-frontend.whitepebble-83aa8a23.switzerlandnorth.azurecontainerapps.io
+
+2. **Azure Virtual Machine**
+
+    In addition to the container-based deployment, the frontend was also deployed on a **Linux Virtual Machine** to demonstrate a traditional infrastructure-based setup.
+    
+    It uses Docker in detached mode with a restart policy (unless-stopped), ensuring it remains available independently of user sessions and automatically restarts after reboots.
+
+    - **Virtual Machine Details**:
+
+        - **VM name**: rustpredict-vm
+        - **Operating system**: Ubuntu 24.04 LTS
+        - **VM size**: Standard B2ats v2 (2 vCPUs, 1 GiB RAM)
+        - **Resource group**: DSMT
+        - **Region**: Switzerland North
+
+    - **Public IP address / URL**: 
+    
+        http://51.107.3.230/
+
+## Backend API
+
+The machine learning prediction API was deployed using **Azure Functions** with a **Flex Consumption** plan to ensure scalability and cost efficiency.
+
+- Service Details
+
+    This setup allows the API to automatically scale based on demand while incurring minimal cost when idle.
+
+	- **Service type**: Azure Functions (HTTP-triggered)
+	- **Function App name**: rustpredict
+	- **Region**: Switzerland North
+	- **Operating system**: Linux
+	- **Plan type**: Flex Consumption (serverless, scale-to-zero)
+
+- API Endpoint
+
+    The prediction API is exposed via an HTTP endpoint
+
+    The function uses **function-level authentication (AuthLevel.FUNCTION)**.
+
+    A function key is required to access the endpoint and is not included in this repository for security reasons.
+
+- Example Request
+
+    GET /api/http_trigger?tenure=12&MonthlyCharges=70
+
+    &TechSupport_yes=1&PhoneService_yes=1
+
+    &Contract_one_year=0&Contract_two_year=1
+
+    &InternetService_fiber_optic=0&InternetService_no=0
+
+
+- Input Parameters
+
+    The API expects the full feature set used by the trained logistic regression model. All parameters are passed as query parameters.
+
+    | Parameter Name | Type | Description |
+    | :--- | :--- | :--- |
+    | **tenure** | `int` | Customer tenure (months) |
+    | **MonthlyCharges** | `float` | Monthly charges amount |
+    | **TechSupport_yes** | `int (0/1)` | Indicator: Whether the customer has technical support |
+    | **PhoneService_yes** | `int (0/1)` | Indicator: Whether the customer has phone service |
+    | **Contract_one_year** | `int (0/1)` | Indicator: One-year contract |
+    | **Contract_two_year** | `int (0/1)` | Indicator: Two-year contract |
+    | **InternetService_fiber_optic** | `int (0/1)` | Indicator: Fiber optic internet service |
+    | **InternetService_no** | `int (0/1)` | Indicator: No internet service |
+
+- Response
+
+    The API returns a single numeric value representing the predicted probability of customer churn.
+
+    - **Response type**: text/plain
+    - **Status code**: 200 OK (successful prediction)
+
+## CI/CD Pipeline
 
 - Setting up Automated checks while building the Docker Container.
 
 - Creating the docker image and integrating the frontend
 
-## Deployment to Serverless
+## Technology
 
-- Deploying the prediciton app to Azure Function
+- Cloud Platform: **Microsoft Azure**
 
 
-## Instructions
+## Previous Instructions
 
 ### The model
 We recommend looking into additional features and engineering new ones to
