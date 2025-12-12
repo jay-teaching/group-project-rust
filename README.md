@@ -15,7 +15,7 @@ IBM Telco Customer Churn dataset.
 
 The model is a simple logistic regression model built using `scikit-learn`.
 
-The model currently uses the following features:
+The model uses the following features:
 - `tenure`: Number of months the customer has stayed with the company.
 - `MonthlyCharges`: The amount charged to the customer monthly.
 - `TechSupport_yes`: Binary indicator of whether the customer has tech support.
@@ -25,6 +25,39 @@ The model currently uses the following features:
 - `InternetService_fiber optic`: Binary indicator of whether the customer uses fiber optic internet service.
 - `InternetService_no`: Binary indicator of whether the customer uses any internet service at all.
 
+## The Interactive Frontend
+
+We used **Marimo Notebook** to allow users interacting with the model predictions by changing the parameters' input. 
+
+User will be able to interaction with the parameters via:
+
+- **Sliders**: `Tenure (months)` and `Monthly Charges ($)` 
+
+- **Dropdown Lists**: Binary and categorical input such as `Tech Support`, `Phone Service`, `Contract Type` and `Internet Service`
+
+Upon changing the input, the user will be able to see the changes in:
+
+- **Prediction Result**
+- **Churn Probability**
+- **Risk Level**. 
+
+In addition, the parameter input table will also be visible.
+
+
+## CI Pipeline
+
+- Setting up Automated checks while building the Docker Container.
+
+- Creating the docker image and integrating the frontend
+
+## Deployment to Serverless
+
+- Deploying the prediciton app to Azure Function
+
+
+## Instructions
+
+### The model
 We recommend looking into additional features and engineering new ones to
 improve model performance. There are other possible issues to explore, including
 model choice, leakage, and others.
@@ -35,14 +68,12 @@ using `joblib`.
 
 An example prediction can be found in `prediction.py`.
 
-## CI Pipeline
-
+### CI Pipeline
 There is a CI pipeline set up using GitHub Actions that runs tests
 on every push and pull request. The tests are located in the `tests/`
 directory and can be run locally using `pytest`.
 
-# Deploying to Serverless
-
+### Deploying to Serverless
 The saved model can deployment to an Azure Function with the following
 steps:
 
@@ -139,4 +170,3 @@ or chose it through the `...` menu.
     - Test the function using the *Test/Run* option in the Function
         - Provide the required parameters (tenure, monthly, techsupport)
         - Run the test and check the output for the prediction result.
-
