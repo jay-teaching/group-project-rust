@@ -20,8 +20,14 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
         result = make_prediction(
             tenure=tenure,
             MonthlyCharges=monthly,
-            TechSupport_yes=techsupport
+            TechSupport_yes=techsupport,
+            PhoneService_yes=0,
+            Contract_one_year=0,
+            Contract_two_year=0,
+            InternetService_fiber_optic=0,
+            InternetService_no=0
         )
+
 
         return func.HttpResponse(str(result))
 
