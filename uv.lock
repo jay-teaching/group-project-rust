@@ -718,6 +718,7 @@ dependencies = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "marimo" },
     { name = "pytest" },
 ]
 
@@ -731,7 +732,10 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "pytest", specifier = ">=9.0.1" }]
+dev = [
+    { name = "marimo", specifier = ">=0.17.8" },
+    { name = "pytest", specifier = ">=9.0.1" },
+]
 
 [[package]]
 name = "threadpoolctl"
