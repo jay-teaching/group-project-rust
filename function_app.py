@@ -13,6 +13,10 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     techsupport = req.params.get('techsupport')
 
     if tenure and monthly and techsupport:
+        tenure = int(tenure)
+        monthly = float(monthly)
+        techsupport = int(techsupport)
+
         result = make_prediction(
             tenure=tenure,
             MonthlyCharges=monthly,
